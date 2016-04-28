@@ -57,7 +57,7 @@ define vagrant::package (
 
   # Set file suffix according to the architecture
   case $::architecture {
-    'x86_64', 'amd64': {
+    'x86_64', 'amd64', 'x86', 'x64': {
       $arch_suffix = 'x86_64'
     }
     'i386': {
