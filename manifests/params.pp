@@ -16,12 +16,10 @@ class vagrant::params {
   case $::kernel {
     'windows': {
       $path = [ 'C:\Windows\System32\WindowsPowerShell\v1.0', 'C:\Windows\System32', 'C:\HashiCorp\Vagrant\bin' ]
-      $vagrant = 'vagrant.exe'
       $grep    = 'findstr.exe /I'
     }
     default: {
       $path = [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ]
-      $vagrant = 'vagrant'
       $grep    = 'grep -i'
     }
   }

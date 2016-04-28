@@ -70,7 +70,7 @@ define vagrant::plugin (
 
   validate_bool($prerelease)
 
-  $check_cmd = "${vagrant::params::vagrant} plugin list | ${vagrant::params::grep} \"^${plugin} \""
+  $check_cmd = "vagrant plugin list | ${vagrant::params::grep} \"^${plugin} \""
 
   # Parse provided type arguments and construct command option string
   $option_version = $version ? {
