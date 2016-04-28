@@ -13,6 +13,12 @@ define vagrant::package (
   $path                 = $::path
 ) {
 
+  if $::osfamily == 'windows' {
+    $package_name = 'Vagrant'
+  } else {
+    $package_name = 'vagrant'
+  }
+
   # The $old_versions hash stores git tag references
   # for versions >= 1.0 and < 1.4
   $old_versions = {
@@ -94,7 +100,7 @@ define vagrant::package (
         creates => $vagrant_source,
         timeout => 0,
         path    => $path,
-        before  => Package['vagrant']
+        before  => Package[$package_name]
       }
     }
     'windows': {
@@ -109,7 +115,7 @@ define vagrant::package (
         creates => $vagrant_source,
         timeout => 0,
         path    => $path,
-        before  => Package['vagrant'],
+        before  => Package[$package_name],
       }
     }
     default: {
@@ -117,12 +123,12 @@ define vagrant::package (
     }
   }
 
-  package { 'vagrant':
+  package { $package_name:
     ensure => $ensure,
     source => $vagrant_source
   }
 
   if $provider != undef {
-    Package['vagrant'] { provider => $provider }
+    Package[$package_name] { provider => $provider }
   }
 }
