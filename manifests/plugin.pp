@@ -32,6 +32,10 @@
 # [*path*]
 #   PATH variable to be used while executing vagrant commands
 #
+# [*gem_file*]
+#   The path to a .gem file to install the plugin from.
+#
+#
 # === Examples
 #
 # # Install current version
@@ -51,6 +55,10 @@
 #   prerelease => true
 # }
 #
+# # Install from a local gem
+# vagrant::plugin { 'vagrant-hostmanager':
+#   gem_file => '/tmp/vagrant-hostmanager.0.1.gem'
+# }
 # === Copyright
 #
 # Copyright 2015 North Development AB
@@ -65,7 +73,8 @@ define vagrant::plugin (
   $prerelease   = false,
   $entry_point  = undef,
   $path         = undef,
-  $timeout      = 0
+  $timeout      = 0,
+  $gem_file     = undef
 ) {
 
   validate_bool($prerelease)
@@ -73,6 +82,10 @@ define vagrant::plugin (
   $check_cmd = "vagrant plugin list | ${vagrant::params::grep} \"^${plugin} \""
 
   # Parse provided type arguments and construct command option string
+  $option_gem_file = $gem_file ? {
+    undef   => '',
+    default => " \"${gem_file}\""
+  }
   $option_version = $version ? {
     undef   => '',
     default => " --plugin-version \"${version}\""
@@ -89,7 +102,7 @@ define vagrant::plugin (
     undef   => '',
     default => " --entry-point \"${entry_point}\""
   }
-  $install_options = "${option_version}${option_prerelease}${option_source}${option_entry_point}"
+  $install_options = "${option_gem_file}${option_version}${option_prerelease}${option_source}${option_entry_point}"
 
   $command_name = "${user}-vagrant-plugin-${plugin}"
 
