@@ -83,8 +83,8 @@ define vagrant::plugin (
 
   # Parse provided type arguments and construct command option string
   $option_gem_file = $gem_file ? {
-    undef   => '',
-    default => " \"${gem_file}\""
+    undef   => $plugin,
+    default => "\"${gem_file}\""
   }
   $option_version = $version ? {
     undef   => '',
@@ -116,7 +116,7 @@ define vagrant::plugin (
     'present', 'installed': {
       Vagrant::Command[$command_name] {
         unless => $check_cmd,
-        command => "vagrant plugin install ${plugin} ${install_options}"
+        command => "vagrant plugin install ${install_options}"
       }
     }
     'absent', 'uninstalled': {
