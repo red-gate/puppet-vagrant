@@ -86,13 +86,15 @@ define vagrant::plugin (
   }
 
   # Parse provided type arguments and construct command option string
-  $option_gem_file = $gem_file ? {
-    undef   => $plugin,
-    default => "\"${gem_file}\""
-  }
-  $option_version = $version ? {
-    undef   => '',
-    default => " --plugin-version \"${version}\""
+  if $gem_file == undef {
+    $option_gem_file = $plugin
+    $option_version = $version ? {
+      undef   => '',
+      default => " --plugin-version \"${version}\""
+    }
+  } else {
+    $option_gem_file = "\"${gem_file}\""
+    $option_version = ''
   }
   $option_prerelease = $prerelease ? {
     true    => ' --plugin-prerelease',
