@@ -108,7 +108,7 @@ define vagrant::plugin (
   }
   $install_options = "${option_gem_file}${option_version}${option_prerelease}${option_source}${option_entry_point}"
 
-  $command_name = "${user}-vagrant-plugin-${plugin}"
+  $command_name = "${user}-vagrant-plugin-${plugin}${version}"
 
   vagrant::command { $command_name:
     user    => $user,
