@@ -81,8 +81,8 @@ define vagrant::plugin (
 
 
   $check_cmd = $version ? {
-    undef   => "vagrant plugin list | ${vagrant::params::grep}\"^${plugin} \"",
-    default => "vagrant plugin list | ${vagrant::params::grep}\"^${plugin} (${version})\""
+    undef   => "${vagrant::params::vagrant} plugin list | ${vagrant::params::grep}\"^${plugin} \"",
+    default => "${vagrant::params::vagrant} plugin list | ${vagrant::params::grep}\"^${plugin} (${version})\""
   }
 
   # Parse provided type arguments and construct command option string
