@@ -79,7 +79,11 @@ define vagrant::plugin (
 
   validate_bool($prerelease)
 
-  $check_cmd = "vagrant plugin list | ${vagrant::params::grep}\"^${plugin} \""
+
+  $check_cmd = $version ? {
+    undef   => "vagrant plugin list | ${vagrant::params::grep}\"^${plugin} \"",
+    default => "vagrant plugin list | ${vagrant::params::grep}\"^${plugin} (${version})\""
+  }
 
   # Parse provided type arguments and construct command option string
   $option_gem_file = $gem_file ? {
