@@ -54,6 +54,6 @@ define vagrant::command (
       'windows' => "C:\\Windows\\System32\\cmd.exe /C ${only_if}",
       default => "su -l ${user} -c '${only_if}'"
     }
-    Exec[$title] { only_if => $only_if }
+    Exec[$title] { onlyif => $only_if }
   }
 }

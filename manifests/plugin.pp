@@ -79,16 +79,22 @@ define vagrant::plugin (
 
   validate_bool($prerelease)
 
-  $check_cmd = "vagrant plugin list | ${vagrant::params::grep} \"^${plugin} \""
+
+  $check_cmd = $version ? {
+    undef   => "${vagrant::params::vagrant} plugin list | ${vagrant::params::grep}\"^${plugin} \"",
+    default => "${vagrant::params::vagrant} plugin list | ${vagrant::params::grep}\"^${plugin} (${version})\""
+  }
 
   # Parse provided type arguments and construct command option string
-  $option_gem_file = $gem_file ? {
-    undef   => $plugin,
-    default => "\"${gem_file}\""
-  }
-  $option_version = $version ? {
-    undef   => '',
-    default => " --plugin-version \"${version}\""
+  if $gem_file == undef {
+    $option_gem_file = $plugin
+    $option_version = $version ? {
+      undef   => '',
+      default => " --plugin-version \"${version}\""
+    }
+  } else {
+    $option_gem_file = "\"${gem_file}\""
+    $option_version = ''
   }
   $option_prerelease = $prerelease ? {
     true    => ' --plugin-prerelease',
@@ -104,7 +110,7 @@ define vagrant::plugin (
   }
   $install_options = "${option_gem_file}${option_version}${option_prerelease}${option_source}${option_entry_point}"
 
-  $command_name = "${user}-vagrant-plugin-${plugin}"
+  $command_name = "${user}-vagrant-plugin-${plugin}${version}"
 
   vagrant::command { $command_name:
     user    => $user,

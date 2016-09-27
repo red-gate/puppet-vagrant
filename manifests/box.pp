@@ -57,7 +57,7 @@ define vagrant::box (
   validate_bool($insecure)
   validate_bool($force)
 
-  $check_cmd = "vagrant box list | ${vagrant::params::grep} \"^${box}\s*[(]${provider}\""
+  $check_cmd = "${vagrant::params::vagrant} box list | ${vagrant::params::grep}\"^${box}\s*[(]${provider}\""
 
   # Parse provided type arguments and construct command option string
   $option_box = " --box ${box}"
