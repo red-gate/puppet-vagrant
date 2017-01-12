@@ -111,7 +111,9 @@ define vagrant::package (
       $vagrant_source = "${::ostempdir}\\${windows_prefix}${version_real}.msi"
 
       exec { 'vagrant-download':
-        command => "powershell.exe -ExecutionPolicy Unrestricted -Command \"(New-Object Net.WebClient).DownloadFile('${download_source}', '${vagrant_source}')\"",
+        command => "powershell.exe -ExecutionPolicy Unrestricted -Command \
+\"[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]'Ssl3, Tls11, Tls12';\
+(New-Object Net.WebClient).DownloadFile('${download_source}', '${vagrant_source}')\"",
         creates => $vagrant_source,
         timeout => 0,
         path    => $path,
